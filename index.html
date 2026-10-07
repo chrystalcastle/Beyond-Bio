@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>BeyondBIO — Biologie, Above and Beyond</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700;900&family=Syne:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -544,6 +544,81 @@ footer {
   .bubbles-grid { grid-template-columns: 1fr; }
   .stats-bar { grid-template-columns: 1fr; }
 }
+/* ═══ MOBILE & ROBUSTHEIT ═══ */
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+img { max-width: 100%; }
+section { scroll-margin-top: 70px; }
+nav { padding-top: env(safe-area-inset-top); padding-left: max(5vw, env(safe-area-inset-left)); padding-right: max(5vw, env(safe-area-inset-right)); }
+
+.daylife-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.daylife-grid > * { min-width: 0; }
+.inf-svg { width: clamp(80px, 9vw, 120px); height: auto; display: block; margin: 0 auto; }
+
+.hamburger { padding: 10px; margin: -10px; -webkit-tap-highlight-color: transparent; }
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+@media (hover: none) {
+  .topic-card:hover .topic-card-img, .hero-img-cell:hover img { transform: none; }
+  .btn-primary:hover, .skill-bubble:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+@media (max-width: 960px) {
+  .nav-links.open {
+    display: flex !important; flex-direction: column; position: fixed;
+    top: 68px; left: 0; right: 0; max-height: calc(100vh - 68px); max-height: calc(100dvh - 68px);
+    overflow-y: auto; background: var(--bg); padding: 1.5rem 5vw 2rem; gap: 1.4rem;
+    border-bottom: 1px solid var(--border); z-index: 999;
+  }
+  .nav-links.open a { font-size: 0.9rem; padding: 6px 0; display: block; }
+  .nav-cta { padding: 8px 14px; margin-left: auto; margin-right: 1rem; }
+  #hero-section { min-height: auto; padding-bottom: 5rem; }
+  .hero-scroll { display: none; }
+  .section-wrap, #problem-section, #themen-section, #careers-section, #mythen-section,
+  #values-section, #termine-section, #join-section, #feedback-section { padding: 80px 5vw !important; }
+  .daylife-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .schedule-grid { grid-template-columns: repeat(5, minmax(110px, 1fr)); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .topic-hero-banner { height: 280px; }
+  .topic-content { padding: 3rem 5vw; }
+  .values-layout, .join-grid, .feedback-grid { gap: 2.5rem; }
+  .pie-container { width: min(260px, 70vw); height: min(260px, 70vw); }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  .topics-grid, .months-grid, .career-net, .studi-cards, .skills-bubbles { grid-template-columns: 1fr; }
+  .skills-bubbles { gap: 1rem; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn-primary, .hero-actions .btn-outline { width: 100%; text-align: center; }
+  .mythen-tabs { flex-direction: column; }
+  .mythen-tab { min-width: 0; width: 100%; }
+  .course-card, .join-form, .feedback-card, .problem-statement { padding: 1.5rem; }
+  .speech-bubble { padding: 1.5rem 1.2rem; }
+  .stat-item { padding: 2rem 1rem; }
+  .value-cell { padding: 1.5rem; }
+  .topic-card-img { height: 130px; }
+  .topic-hero-banner { height: 220px; }
+  .topic-hero-overlay { padding: 1.5rem 5vw; }
+  .topic-hero-overlay h1 { font-size: clamp(2rem, 11vw, 3rem); word-break: break-word; }
+  .section-title { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+  .join-big { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+  .social-links { flex-wrap: wrap; }
+  .stars { gap: 6px; flex-wrap: wrap; }
+  .star { width: 44px; height: 44px; }
+  .radio-opt { padding: 13px; }
+  .btn-back { padding: 8px 0; margin-bottom: 2rem; }
+  .form-input, .form-textarea { font-size: 16px; }
+  .form-submit, .btn-primary, .btn-outline, .nav-cta { min-height: 44px; }
+}
+
+@media (max-width: 360px) {
+  .nav-logo { font-size: 1.6rem; }
+  .nav-cta { font-size: 0.65rem; padding: 8px 10px; }
+}
 </style>
 </head>
 <body>
@@ -620,7 +695,11 @@ footer {
         <span class="stat-label">Kernthemen unserer Vorträge</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number">∞</span>
+       <span class="stat-number" role="img" aria-label="unendlich">
+  <svg class="inf-svg" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M32 16C26 7 20 4 14 4 7 4 2 9 2 16s5 12 12 12c6 0 12-3 18-12s12-12 18-12c7 0 12 5 12 12s-5 12-12 12c-6 0-12-3-18-12z"/>
+  </svg>
+</span>
         <span class="stat-label">Karrieremöglichkeiten</span>
       </div>
     </div>
@@ -840,7 +919,7 @@ footer {
     <!-- DAY IN LIFE -->
     <div id="tab-daylife" class="mythen-content">
       <p style="font-size:0.88rem;color:var(--grey);margin-bottom:2rem;">Das hier ist Bene — 1. Semester Biologie-Bachelor, LMU München. Heute begleiten wir ihn auf seinem typischen Dienstag.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;">
+     <div class="daylife-grid">
         <div>
           <h3 style="font-family:var(--fd);font-size:1.4rem;margin-bottom:1.5rem;">Benes Dienstag</h3>
           <div class="day-timeline">
