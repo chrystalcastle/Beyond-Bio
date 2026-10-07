@@ -1339,10 +1339,20 @@ const topics = {
 };
 
 // ── PAGE NAVIGATION ──
+function closeMenu() {
+  const l = document.getElementById('navLinks');
+  const h = document.querySelector('.hamburger');
+  if (l) l.classList.remove('open');
+  if (h) { h.classList.remove('open'); h.setAttribute('aria-expanded', 'false'); }
+}
+
 function showPage(pageId) {
+  const target = document.getElementById('page-' + pageId);
+  if (!target) return;
+  closeMenu();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + pageId).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  target.classList.add('active');
+  window.scrollTo(0, 0);
 }
 
 function showTopicPage(topicId) {
@@ -1373,10 +1383,11 @@ function showTopicPage(topicId) {
 }
 
 function scrollToSection(id) {
+  closeMenu();
   setTimeout(() => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 50);
+  }, 80);
 }
 
 // ── NAV SCROLL ──
@@ -1450,17 +1461,25 @@ function submitJoin(e) {
 
 // ── HAMBURGER ──
 function toggleMenu() {
-  const links = document.getElementById('navLinks');
-  const isOpen = links.style.display === 'flex';
-  links.style.cssText = isOpen ? '' : `
-    display:flex; flex-direction:column; position:fixed;
-    top:68px; left:0; right:0; background:var(--bg);
-    padding:2rem 5vw; gap:1.5rem; border-bottom:1px solid var(--border); z-index:999;
-  `;
+  const l = document.getElementById('navLinks');
+  const h = document.querySelector('.hamburger');
+  const open = l.classList.toggle('open');
+  h.classList.toggle('open', open);
+  h.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+window.addEventListener('resize', () => { if (window.innerWidth > 960) closeMenu(); });
 
 // Initial trigger
-triggerBars();
+triggerBars();// Kaputte Bilder abfangen, damit kein Layout bricht
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('error', () => { img.style.visibility = 'hidden'; });
+});
+// Fallback, falls IntersectionObserver fehlt
+if (!('IntersectionObserver' in window)) {
+  document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+  triggerBars();
+}
 </script>
 </body>
 </html>
